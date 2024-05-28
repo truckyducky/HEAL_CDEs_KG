@@ -46,7 +46,7 @@ This dynamic tool presents a knowledge graph and is designed to help researchers
 - An **Edge** is, essentially, a *verb*. It represents the relationships or connections between the nodes, such as a core CDE measure being associated with a particular domain or questionnaire.
 
 # Understanding Pathways
-A **Pathway** is, essentially, a *chain*. It represents a sequence of events, influences, or descriptions linking nodes through their edges. Different pathways indicate different patterns, and there can be parallel pathways.
+A **Pathway** is, essentially, a *chain*. It represents a sequence of events, influences, or descriptions linking nodes through their edges. Different pathways indicate different patterns, and there can be parallel pathways. Think of a pathway as a series of edges that connect a sequence of nodes, representing a more complex sequence of relationships or interactions.
             
 # Map Key 
 
