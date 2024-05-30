@@ -40,28 +40,58 @@ st.title('Interactive Knowledge Network of HEAL Core CDEs')
 st.markdown("""
 This dynamic tool presents a knowledge graph and is designed to help researchers understand [common data elements (CDEs), particularly those that pertain to HEAL](https://heal.nih.gov/data/common-data-elements). The tool allows researchers to explore relationships among CDEs and identify patterns in their use across studies.
             
-# Understanding Nodes and Edges
+## Understanding Nodes and Edges
 
 - A **Node** is, essentially, a *noun*. It represents the entities in the graph, such as "Core CDE Measures," "Domain," "Questionnaire," etc. Each node can have various properties like size, color, label, etc.
 - An **Edge** is, essentially, a *verb*. It represents the relationships or connections between the nodes, such as a core CDE measure being associated with a particular domain or questionnaire.
 
-# Understanding Pathways
+## Understanding Pathways
 A **Pathway** is, essentially, a *chain*. It represents a sequence of events, influences, or descriptions linking nodes through their edges. Different pathways indicate different patterns, and there can be parallel pathways. Think of a pathway as a series of edges that connect a sequence of nodes, representing a more complex sequence of relationships or interactions.
-            
-# Map Key 
+A pathway might show how a "Core CDE Measure" leads to a "Domain," which then connects to a "Questionnaire," forming a sequence.
 
-**Node Colors and Shapes:**
-- `Core CDE Measures`: <span style="color:#4b0082;">●</span> Dark Purple (Circle) - the size of the node corresponds to its frequency of use--bigger circles indicate greater usage across studies.
-- `Domain`: <span style="color:#dda0dd;">◯</span> Light Purple (Ellipse)
-- `Questionnaire`: <span style="color:#ff1493;">▢</span> Dark Pink (Square)
-- `HEAL Research Program`: <span style="color:#ffb6c1;">△</span> Light Pink (Triangle)
-- `Study Name` and `PI Name`: Text (no specific shape)
+- "Core CDE Measure" --> "Domain" --> "Questionnaire"
 
-# Explore!
+## Graph Key 
+
+### Node Colors and Shapes:
+- `Core CDE Measures`:
+  - <span style="color:#4b0082;">&#x25CF;</span> Dark Purple (Circle)
+  - **Size**: Proportional to their frequency in the reported CDE use; bigger circles indicate greater usage across studies.
+  - **Purpose**: These nodes represent the core measures and are central to the graph.
+
+- `Domain`:
+  - <span style="color:#dda0dd;">⬮</span> Light Purple (Ellipse)
+  - **Size**: Fixed size.
+  - **Purpose**: These nodes categorize different domains within the data.
+
+- `Questionnaire`:
+  - <span style="color:#ff1493;">&#x25A0;</span> Dark Pink (Square)
+  - **Size**: Fixed size.
+  - **Purpose**: These nodes represent various questionnaires.
+
+- `HEAL Research Program`:
+  - <span style="color:#ffb6c1;">&#x25B2;</span> Light Pink (Triangle)
+  - **Size**: Fixed size.
+  - **Purpose**: These nodes represent different programs under the HEAL (Helping to End Addiction Long-term) initiative.
+
+- `Study Name` and `PI Name`:
+  - Text (no specific shape)
+  - **Size**: Fixed size.
+  - **Purpose**: These nodes represent the names of different studies and principal investigators.
+
+### Edges Colors
+  - Edges inherit the color of the nodes they connect. For example, an edge connecting a "Core CDE Measures" node (<span style="color:#4b0082;">&#x25CF;</span>) to a "Domain" node (<span style="color:#dda0dd;">⬮</span>) will inherit the color properties **_from_** the connected nodes.
+  - For example, if you select the questionnaire (<span style="color:#ff1493;">&#x25A0;</span>), 'PROMIS', you will see:
+    - Dark purple edges: connected to 'Core CDE Measures' nodes that are related to 'PROMIS'
+    - Light purple edges: connect 'PROMIS' to nodes categorized under 'Domain'
+    - Dark pink edges: connect 'PROMIS' to other nodes categorized under 'Questionnaire'
+
+## Explore!
 This interactive knowledge graph is designed to let researchers highlight and explore individual nodes and their connections. Users can search and navigate through the graph using simple properties like color, shape, and size, easing identification of patterns, relationships, and focal points of interest.
-The graph is continually being refined and updated
-            
+The graph is continually being refined and updated.
+
 For more information on using the filter feature, [explanation below](#selecting-a-node).
+
             
 """, unsafe_allow_html=True)
 
@@ -71,7 +101,7 @@ def create_knowledge_graph(data, columns):
     max_frequency = max(descriptor_frequency.values())
 
     added_nodes = set()  # Track added nodes to avoid duplicates and ensure node existence before adding edges
-    min_size = 25 # Minimum size for nodes
+    min_size = 15 # Minimum size for nodes
 
     for entry in data:
         core_cde_measure = entry[columns.get_loc('Core CDE Measures')]
@@ -124,8 +154,8 @@ def create_knowledge_graph(data, columns):
           "updateInterval": 100
         },
         "barnesHut": {
-          "gravitationalConstant": -80000,
-          "centralGravity": 0.002,
+          "gravitationalConstant": -100000,
+          "centralGravity": 0.02,
           "springLength": 1000,
           "springConstant": 0.02,
           "damping": 0.3
@@ -162,13 +192,14 @@ def process_entries(entries, entry_type, added_nodes):
 
 create_knowledge_graph(project_data, descriptors_data.columns)
 
+
 # Display the graph in the Streamlit app
 html_path = 'knowledge_graph.html'
 try:
     with open(html_path, 'r', encoding='utf-8') as HtmlFile:
         html_content = HtmlFile.read()
 
-    components.html(html_content, height=1000, width=1000)
+    components.html(html_content, height=800, width=1000)
 
 except FileNotFoundError:
     st.warning(f"HTML file not found at {html_path}.")
@@ -177,7 +208,7 @@ except Exception as e:
 
 # Details about filtering 
 st.markdown("""
-# Selecting a Node
+### Selecting a Node
 
 - **Select a Node by ID**:
   - You can use the dropdown menu labeled "Select a Node by ID" to choose a specific node. This will highlight the node and its connections, helping you focus on a particular part of the graph. 
@@ -190,7 +221,7 @@ st.markdown("""
   - Properties you might filter on include label, color, size, etc.
   - Example: To highlight nodes with a specific research focus area, you can select label and type the specific focus area you're interested in.
 
-# Selecting an Edge
+### Selecting an Edge
 
 - **Select a Network Item (Edge)**:
   - When you select "edge" from the "Select a network item" dropdown, you can choose properties related to the edges. This is useful for highlighting or filtering specific relationships in the graph.
@@ -199,7 +230,7 @@ st.markdown("""
   - Properties for edges might include from (starting node), to (ending node), color, width, etc.
   - Example: You might filter edges to show only those connected to a particular node or of a specific color.
 
-# Filtering and Resetting
+### Filtering and Resetting
 
 - **Filter**:
   - After selecting the node or edge and specifying the properties, clicking the "Filter" button will apply the filter to the graph, highlighting the nodes or edges that match your criteria.
@@ -207,7 +238,7 @@ st.markdown("""
 - **Reset Selection**:
   - Clicking "Reset Selection" will clear the current filter, returning the graph to its default state where all nodes and edges are visible.
 
-# Practical Use Case
+### Practical Use Case
 
 - Highlight Specific **Nodes**: let's say you want to highlight nodes related to a specific institution. You would:
   - Select "node" from "Select a network item".
@@ -217,8 +248,9 @@ st.markdown("""
 - Highlight Specific **Edges**: to highlight edges to focus on the pathway:
   - Select "edge" from "Select a network item".
   - Choose 'from' or 'to' in "Select a property".
-  - 'to' allows you to see overlapping CDE use between research programs by selecting the HEAL Research Program names in the 'Select value(s)' section.
-  - 'from' allows you to see overlapping CDE use between HEAL name by selecting specific study names in the 'Select value(s)' section. 
+  - As a general rule-of-thumb, selecting:
+    - '**to**' allows you to see overlapping CDE use between _research programs_ by selecting the HEAL Research Program names in the 'Select value(s)' section.
+    - '**from**' allows you to see overlapping CDE use between _HEAL study name_ by selecting specific study names in the 'Select value(s)' section. 
 """)
 
 # Generate and display the guide table for possible selection choices
