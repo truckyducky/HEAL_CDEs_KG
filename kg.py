@@ -85,6 +85,7 @@ A pathway might show how a "Core CDE Measure" leads to a "Domain," which then co
     - Dark purple edges: connected to 'Core CDE Measures' nodes that are related to 'PROMIS'
     - Light purple edges: connect 'PROMIS' to nodes categorized under 'Domain'
     - Dark pink edges: connect 'PROMIS' to other nodes categorized under 'Questionnaire'
+    - Blue edges: connect 'PI names' to other nodes categorized under 'Study names'
 
 ## Explore!
 This interactive knowledge graph is designed to let researchers highlight and explore individual nodes and their connections. Users can search and navigate through the graph using simple properties like color, shape, and size, easing identification of patterns, relationships, and focal points of interest.
@@ -158,6 +159,7 @@ def create_knowledge_graph(data, columns):
           "centralGravity": 0.02,
           "springLength": 1000,
           "springConstant": 0.02,
+          "springStrength": 0.02,
           "damping": 0.3
         }
       },
