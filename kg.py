@@ -159,7 +159,7 @@ def create_knowledge_graph(data, columns):
           "centralGravity": 0.02,
           "springLength": 1000,
           "springConstant": 0.02,
-          "springStrength": 0.02,
+          "springStrength": 0.02,  
           "damping": 0.3
         }
       },
@@ -194,6 +194,9 @@ def process_entries(entries, entry_type, added_nodes):
 
 create_knowledge_graph(project_data, descriptors_data.columns)
 
+### If nodes still overlap/graph doesn't run, delete line 162
+# try this line of code
+# net.repulsion(spring_strength = 0)
 
 # Display the graph in the Streamlit app
 html_path = 'knowledge_graph.html'
